@@ -1,10 +1,21 @@
 from flask import Flask, render_template
+import socket
 app=Flask(__name__,  static_folder='')
+
+def get_host_and_ip():
+    host = socket.gethostname()
+    ip = socket.gethostbyname(host)
+    return str(host),str(ip)
 
 @app.route('/')
 @app.route('/index.html')
 def index():
     return render_template('index.html')
+
+@app.route('/health')
+def health():
+    host,ip=get_host_and_ip()
+    return render_template('health.html',HOST=host, IP = ip)
 
 @app.route('/feature.html')
 def feature():
