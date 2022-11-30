@@ -12,7 +12,7 @@ pipeline {
            steps {
                 git credentialsId: 'washbingit', 
                 url: 'https://github.com/shettymanish01/WashBin',
-                branch: 'dev'
+                branch: 'main'
            }
         }
 
