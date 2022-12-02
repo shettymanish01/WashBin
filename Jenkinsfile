@@ -39,22 +39,28 @@ pipeline {
         }
         
         
-        stage('Update K8S manifest'){
+        stage('Checkout K8S manifest SCM'){
             steps {
-                script{
-                    sh '''
-                    cat deploymentservice.yaml
-                    sed -i '' "s/latest/${BUILD_NUMBER}/g" deploymentservice.yaml
-                    cat deploymentservice.yaml
-                    '''                        
-                }
+                git credentialsId: 'washbingit', 
+                url: 'https://github.com/shettymanish01/KubernetesDeployment.git',
+                branch: 'main'
             }
         }
-
-        stage('Deploy to k8s'){
-            steps{
+        
+        stage('Update K8S manifest & push to Repo'){
+            steps {
                 script{
-                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'k8sconfigpwd')
+                    withCredentials([usernamePassword(credentialsId: 'washbingit', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh '''
+                        cat deploy.yaml
+                        sed -i '' "s/latest/${BUILD_NUMBER}/g" deploy.yaml
+                        cat deploy.yaml
+                        git add deploy.yaml
+                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
+                        git remote -v
+                        git push https://github.com/shettymanish01/KubernetesDeployment.git HEAD:main
+                        '''                        
+                    }
                 }
             }
         }
