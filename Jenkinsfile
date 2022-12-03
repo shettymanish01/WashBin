@@ -53,7 +53,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'washbingit', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
                         cat deploy.yaml
-                        sed -i '' "s/latest/${BUILD_NUMBER}/g" deploy.yaml
+                        sed -i 's+shettymanish01/testsite.*+shettymanish01/testsite:${BUILD_NUMBER}+g' deploy.yaml
                         cat deploy.yaml
                         git add deploy.yaml
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
