@@ -33,6 +33,7 @@ pipeline {
                     sh '''
                     echo 'Push to Repo'
                     docker push shettymanish01/testsite:${BUILD_NUMBER}
+                    docker image rm shettymanish01/testsite:${BUILD_NUMBER}
                     '''
                 }
             }
