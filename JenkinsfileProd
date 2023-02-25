@@ -36,7 +36,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'washbingit', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
                         cat deploymentserviceprod.yaml
-                        sed -i '' "s/testsite.*/testsite:${params.TAG}/g" deploymentserviceprod.yaml
+                        sed -i '' "s/testsite.*/testsite:${TAG}/g" deploymentserviceprod.yaml
                         cat deploymentserviceprod.yaml
                         git add deploymentserviceprod.yaml
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline Prod '
