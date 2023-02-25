@@ -3,6 +3,9 @@ pipeline {
     agent {
         label 'CICD'
     } 
+    parameters {
+        string defaultValue: 'latest', description: 'Enter Image Tag', name: 'TAG'
+    }
     
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
@@ -14,9 +17,35 @@ pipeline {
            steps {
                 git credentialsId: 'washbingit', 
                 url: 'https://github.com/shettymanish01/WashBin',
-                branch: 'dev'
+                branch: 'main'
                 
            }
+        }
+
+        stage('Checkout K8S manifest SCM'){
+            steps {
+                git credentialsId: 'washbingit', 
+                url: 'https://github.com/shettymanish01/washbin_deployment.git',
+                branch: 'main'
+            }
+        }
+
+        stage('Update K8S manifest & push to Repo'){
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'washbingit', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh '''
+                        cat deploymentserviceprod.yaml
+                        sed -i '' "s/testsite.*/testsite:${params.TAG}/g" deploymentserviceprod.yaml
+                        cat deploymentserviceprod.yaml
+                        git add deploymentserviceprod.yaml
+                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline Prod '
+                        git remote -v
+                        git push https://github.com/shettymanish01/washbin_deployment.git HEAD:main
+                        '''                        
+                    }
+                }
+            }
         }
 
         

@@ -59,7 +59,7 @@ pipeline {
                         sed -i '' "s/testsite.*/testsite:${BUILD_NUMBER}/g" deploymentservicedev.yaml
                         cat deploymentservicedev.yaml
                         git add deploymentservicedev.yaml
-                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline Dev - ${GIT_COMMIT}'
+                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline Dev '
                         git remote -v
                         git push https://github.com/shettymanish01/washbin_deployment.git HEAD:main
                         '''                        
