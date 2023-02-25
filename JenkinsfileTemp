@@ -23,19 +23,18 @@ pipeline {
                 script{
                     sh '''
                     echo 'Buid Docker Image'
-                    docker build -t shettymanish01/testsite:${BUILD_NUMBER} .
+                    docker build -t shettymanish01/testsite .
                     '''
                 }
             }
         }
 
-        stage('Push the Image'){
+        stage('Push the artifacts'){
            steps{
                 script{
                     sh '''
                     echo 'Push to Repo'
-                    docker push shettymanish01/testsite:${BUILD_NUMBER}
-                    docker image rm shettymanish01/testsite:${BUILD_NUMBER}
+                    docker push shettymanish01/testsite
                     '''
                 }
             }
