@@ -38,7 +38,7 @@ pipeline {
                     echo 'Testing'
                     docker container rm -f $CONTAINER_NAME || true
                     docker container run --name $CONTAINER_NAME -d -p 5000:5000 shettymanish01/testsite:${BUILD_NUMBER}
-                    curl localhost:5000/health
+                    curl -k https://localhost:5000/health
                     docker container rm -f $CONTAINER_NAME                            
                     '''
                 }
