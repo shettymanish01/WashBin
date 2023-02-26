@@ -37,11 +37,8 @@ pipeline {
                     sh '''
                     echo 'Testing'
                     docker container rm -f $CONTAINER_NAME || true
-                    docker container run --name $CONTAINER_NAME -d shettymanish01/testsite:${BUILD_NUMBER}
-                    docker container exec -t $CONTAINER_NAME /bin/bash
-                    apt-get -y update; apt-get -y install curl
+                    docker container run --name $CONTAINER_NAME -d -p 5000:5000 shettymanish01/testsite:${BUILD_NUMBER}
                     curl localhost:5000/health
-                    exit             
                     docker container rm -f $CONTAINER_NAME                            
                     '''
                 }
