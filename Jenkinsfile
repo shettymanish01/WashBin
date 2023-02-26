@@ -30,6 +30,22 @@ pipeline {
             }
         }
 
+        stage('Test'){
+            steps{
+                script{
+                    sh '''
+                    echo 'Testing'
+                    docker container stop $CONTAINER_NAME || true
+                    docker container run --name $CONTAINER_NAME -d shettymanish01/testsite:${BUILD_NUMBER}
+                    docker exec -it $CONTAINER_NAME /bin/bash
+                    curl localhost:5000/health
+                    exit             
+                    docker container rm -f $CONTAINER_NAME                            
+                    '''
+                }
+            }
+        }
+
         stage('Push the Image'){
            steps{
                 script{
