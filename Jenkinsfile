@@ -7,6 +7,7 @@ pipeline {
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
         BUILD_COMMIT = "${GIT_COMMIT}"
+        CONTAINER_NAME = "washbin-test-container"
     }
     
     stages {
