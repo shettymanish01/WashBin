@@ -36,7 +36,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Testing'
-                    docker container stop $CONTAINER_NAME || true
+                    docker container rm -f $CONTAINER_NAME || true
                     docker container run --name $CONTAINER_NAME -d shettymanish01/testsite:${BUILD_NUMBER}
                     docker container exec -t $CONTAINER_NAME /bin/bash
                     curl localhost:5000/health
