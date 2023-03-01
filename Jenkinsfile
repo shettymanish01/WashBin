@@ -7,6 +7,7 @@ pipeline {
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
         BUILD_COMMIT = "${GIT_COMMIT}"
+        CONTAINER_NAME = "washbin-test-container"
     }
     
     stages {
@@ -25,6 +26,21 @@ pipeline {
                     sh '''
                     echo 'Buid Docker Image'
                     docker build -t shettymanish01/testsite:${BUILD_NUMBER} .
+                    '''
+                }
+            }
+        }
+
+        stage('Test'){
+            steps{
+                script{
+                    sh '''
+                    echo 'Testing'
+                    docker container rm -f $CONTAINER_NAME || true
+                    docker container run --name $CONTAINER_NAME -d -p 5000:5000 shettymanish01/testsite:${BUILD_NUMBER}
+                    sleep 15
+                    curl localhost:5000/health
+                    docker container rm -f $CONTAINER_NAME                            
                     '''
                 }
             }
